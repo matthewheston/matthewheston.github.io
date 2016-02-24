@@ -1,0 +1,73 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="github.css">
+</head>
+<body>
+<h1>What is this?</h1>
+<p>Political candidates often present information about themselves and their
+proposed policies on their websites. However, it isn't always easy to compare
+different candidates or find the most important information on these websites.
+This is an example of me trying to begin to think about how we could use
+technology to start to address these questions by comparing the two frontrunners
+in the Democratic race: Hillary Clinton and Bernie Sanders.</p>
+<h1>What am I looking at?</h1>
+<p>Below is a list of links to issues. If you go to an issue page, you'll find two
+sections — one for each candidate. The text there is text extracted from that
+candidate's website about the given issue. The way it's currently formatted is
+each line is a sentence. The color of that sentence is supposed to correspond to
+how unique that sentence is and how well it distinguishes one candidate from the
+other. Darker sentences do a better job of distinguishing than lighter ones.
+This is to say, if you want to skim the text, the sentences in a darker font
+should be the ones you pay attention to to help you understand what makes each
+candidate unique.</p>
+<h1>How does this work?</h1>
+<p>First, we parse each candidate's issue page (see
+<a href="https://berniesanders.com/issues/">Bernie</a> and
+<a href="https://www.hillaryclinton.com/issues/">Hillary</a>) and we identify the major
+issues they discuss and extract those. Currently, we use only the names of the
+issues to try to find overlap between the candidates. For example, Hillary talks
+about "Climate change and energy" and Bernie talks about "Combating Climate
+Change to Save the Planet." Since these both contain the phrase "Climate
+Change," we assume they refer to the same issue. The current implementation
+doesn't always exactly work out. Hillary talks broadly about "Economy" whereas
+Bernie talks about "Improving the Rural Economy." Currently, we match these,
+even though they're not exactly the same, so afterwards we manually remove this
+match. Ideally, we'd improve matching so no intervention was required. There are
+a couple of other issues with the current implementation. We only look for one
+best match. Hillary has one issue called "Social Security and Medicare." Bernie
+has both "Strengthen and Expand Social Security" and "Medicare For All." Our
+current approach will end up ignoring "Medicate For All" since Hillary's issue
+has already been matched to Bernie's Social Security issue. We also ignore
+matches we're not confident in. The string matching algorithm doesn't report a
+high confidence in matching Hillary's "Veterans, the armed forces, and their
+families" and Bernie's "Caring for Our Veterans," even though to a human this is
+obviously a match. Future work should address these problems.</p>
+<p>After we find matching issues, we scrape the text from each candidate's issue
+page for that issue. We then try to break this text into sentences. Then we use
+a fairly simplistic approach based on word frequency across sentences to assign
+a score to each sentence. A higher score for a sentence means it contains more
+unique words. These words are unique both within a candidate's issue page and
+compared to the other candidate. For example, part of what makes the phrase
+"Global Equality Fund" important is that it's not mentioned in a lot of
+sentences by Hillary Clinton <em>or</em> by Bernie Sanders. Therefore, when Hillary
+Clinton does use a sentence that contains this phrase, it is likely to receive a
+high score.</p>
+<p>After scoring all the sentences for a candidate, we compare the score to the
+scores of all other sentences in that issue. Based on how high or low the score
+is compared to the rest of the scores, we assign a color to the sentence.
+Sentences that are completely black are those that had a score that was in the
+90th percentile of scores for that candidate on that issue.</p>
+<h1>The Issues</h1>
+<ul>
+<li><a href="Climate-change-and-energy.html">Climate change and energy / Combating Climate Change to Save the Planet</a></li>
+<li><a href="College.html">College / It's Time to Make College Tuition Free and Debt Free</a></li>
+<li><a href="Disability-rights.html">Disability rights /  Fighting for Disability Rights</a></li>
+<li><a href="Immigration-reform.html">Immigration reform / A Fair and Humane Immigration Policy</a></li>
+<li><a href="LGBT-equality.html">LGBT equality / Fighting for LGBT Equality</a></li>
+<li><a href="Racial-justice.html">Racial justice / Racial Justice</a></li>
+<li><a href="Social-Security-and-Medicare.html">Social Security and Medicare / Strengthen and Expand Social Security</a></li>
+<li><a href="Wall-Street-and-corporate-America.html">Wall Street and corporate America / Reforming Wall Street</a></li>
+</ul>
+</body>
+</html>
